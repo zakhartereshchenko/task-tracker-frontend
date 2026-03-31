@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import type { LoginData } from "../../types/forms";
 import { useRegister } from "../../hooks/useRegister";
 import { AuthForm } from "./AuthForm";
@@ -7,7 +7,9 @@ import { Spinner } from "../ui/spinner";
 
 export const SignUpForm: React.FC = () => {
     
-    const form = useForm<LoginData>();
+    const form = useForm<LoginData>({
+    mode: "onChange", // или "onBlur"
+    });
 
     const { mutateAsync, data, isPending, isError } = useRegister();
 
@@ -17,17 +19,13 @@ export const SignUpForm: React.FC = () => {
         .catch((error)=> toast.error(`${error.error}` ))
     }
 
-    if(isPending) {
-        return (
-            <Spinner className="size-8" />
-        )
-    }
-
     return (
-        <AuthForm 
-            form={form}
-            onSubmit={handleSignUp}
-            submitText="Sign Up"
-        />
+        <FormProvider {...form}>
+            <AuthForm 
+                onSubmit={handleSignUp}
+                submitText="Sign Up"
+                isSending={isPending}
+            />
+        </FormProvider>
     )
 }

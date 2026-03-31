@@ -1,14 +1,15 @@
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import type { LoginData } from "../../types/forms";
 import { AuthForm } from "./AuthForm";
 import { useLogin } from "../../hooks/useLogin";
 import { toast } from "sonner";
-import { Spinner } from "../ui/spinner";
 
 
 export const SignInForm: React.FC = () => {
     
-    const form = useForm<LoginData>();
+    const form = useForm<LoginData>({
+    mode: "onChange", // или "onBlur"
+    });
 
     const { mutateAsync, data, isError, isPending } = useLogin();
 
@@ -18,17 +19,13 @@ export const SignInForm: React.FC = () => {
         .catch((error)=> toast.error(`${error.error}` ))
     }
 
-    if(isPending) {
-        return (
-            <Spinner className="size-8" />
-        )
-    }
-
     return (
-        <AuthForm 
-            form={form}
-            onSubmit={handleSignIn}
-            submitText="Sign In"
-        />
+        <FormProvider {...form}>
+            <AuthForm
+                onSubmit={handleSignIn}
+                submitText="Sign In"
+                isSending={isPending}
+            />
+        </FormProvider>
     )
 }

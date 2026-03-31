@@ -1,8 +1,9 @@
-import type { UseFormReturn } from "react-hook-form";
+import { useFormContext, useFormState, type UseFormReturn } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { useEffect } from "react";
+import { Spinner } from "../ui/spinner";
 
 type AuthFormData = {
   username: string;
@@ -10,15 +11,18 @@ type AuthFormData = {
 };
 
 interface IProps {
-    form: UseFormReturn<AuthFormData>;
     onSubmit: (data: AuthFormData) => void;
     submitText?: string;
+    isSending?: boolean;
 }
 
-export const AuthForm = ({ form, onSubmit, submitText }: IProps) => {
+export const AuthForm = ({ onSubmit, submitText, isSending }: IProps) => {
 
-    const { register, handleSubmit, formState: { errors } } = form;
-    
+    const { register, handleSubmit, control } =  useFormContext<AuthFormData>();
+
+    const { errors } = useFormState({ control });
+
+    console.log(errors)
     useEffect(() => {
         console.log("errors changed:", errors);
     }, [errors]);
@@ -26,12 +30,16 @@ export const AuthForm = ({ form, onSubmit, submitText }: IProps) => {
     return (
         <form className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup className="gap-7">
-                <Field className="relative">
-                    <FieldLabel htmlFor="form-username">Username</FieldLabel>
+                <Field className="relative" data-invalid={!!errors.username}>
+                    <FieldLabel htmlFor="form-username" className="text-white">
+                        Username
+                    </FieldLabel>
                     <Input
                         id="form-username"
                         type="text"
                         placeholder="Write your username..."
+                        className="text-white"
+                        aria-invalid={!!errors.username}
                         {...register("username", { required: "Username is required", minLength: { value: 3, message: "Username must be at least 3 characters" } })}
                     />
                     {errors.username && (
@@ -42,11 +50,12 @@ export const AuthForm = ({ form, onSubmit, submitText }: IProps) => {
                 </Field>
 
                 <Field className="relative">
-                    <FieldLabel htmlFor="form-password">Password</FieldLabel>
+                    <FieldLabel htmlFor="form-password" className="text-white">Password</FieldLabel>
                     <Input 
                         id="form-password" 
                         type="password" 
                         placeholder="Write your password..." 
+                        className="text-white"
                         {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })} 
                     />
                     {errors.password && (
@@ -58,7 +67,7 @@ export const AuthForm = ({ form, onSubmit, submitText }: IProps) => {
                 
                 <Field orientation="horizontal">
                     <Button type="submit" className="w-full">
-                        {submitText || "Submit"}
+                        {isSending ? <Spinner className="size-4" /> : submitText}
                     </Button>
                 </Field>
             </FieldGroup>
