@@ -1,38 +1,39 @@
-import type { IProject } from "../pages/ProjectsPage";
-import { Avatar } from "./Avatar";
-import { Button } from "./ui/button";
+import type { IProjectListItem } from "../types/projects";
+import { Title } from "./Title";
+import { ProjectCard } from "./ProjectCard";
 
 interface IProps {
-    projects?: IProject[];
+    title: string;
+    projects?: IProjectListItem[];
+    isLoading?: boolean;
 }
 
-export const ProjectsGridView: React.FC<IProps> = ({ projects }) => {
-    const emptyProjectList =!projects || projects.length === 0
+export const ProjectsGridView: React.FC<IProps> = ({ title, projects, isLoading }) => {
+    const emptyProjectList = !projects || projects.length === 0
 
     const projectsLength = projects?.length
 
     const amountOfProjectsLabel = projectsLength === 1 ? "1 project" : `${projectsLength} projects`
     
     return (
-        <div className="flex items-center justify-center">
-            {emptyProjectList 
-            ? <p className="text-gray-500">No projects found.</p>
-            : <div className="flex flex-col">
-                <p className="text-gray-500">{amountOfProjectsLabel}</p>
+        <div className="flex flex-col items-center">
+            <div className="flex flex-col w-full">
+                <Title label={title} badgeCount={projectsLength} subTitle={emptyProjectList ? "No projects found." : amountOfProjectsLabel} isLoading={isLoading}/>
                 <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {projects?.map((project) => (
-                        <li key={project.id} className="border p-4 rounded flex items-center gap-4">
-                            <Avatar name={project.name} />
-                            <div className="min-w-0">
-                                <h3 className="truncate text-lg">{project.name}</h3>
-                                <p className="truncate text-sm">{project.description}</p>
-                            </div>
-                            <Button className="ml-auto">Join</Button>
-                        </li>
-                    ))}
+                    {projects?.map((project) => {
+                        const {id, name, description, membersCount, isMember} = project
+
+                        return <ProjectCard 
+                            key={id} 
+                            id={id} 
+                            name={name} 
+                            description={description} 
+                            membersCount={membersCount} 
+                            isMember={isMember} 
+                        />
+                    })}
                 </ul>
             </div>
-            }
         </div>
     )
 }

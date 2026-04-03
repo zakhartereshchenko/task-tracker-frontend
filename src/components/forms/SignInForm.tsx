@@ -1,8 +1,8 @@
 import { FormProvider, useForm } from "react-hook-form";
 import type { LoginData } from "../../types/forms";
 import { AuthForm } from "./AuthForm";
-import { useLogin } from "../../hooks/useLogin";
 import { toast } from "sonner";
+import { useLogin } from "../../hooks/useAuth/useLogin";
 
 
 export const SignInForm: React.FC = () => {

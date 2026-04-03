@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { HomePage, LoginPage, ProjectsPage } from "../pages";
+import { HomePage, LoginPage, ProjectPage, ProjectsPage } from "../pages";
 import { LayoutWithHeader } from "../components/layouts";
 
 export const AppRoutes = () => {
@@ -8,6 +8,7 @@ export const AppRoutes = () => {
         <Route element={<LayoutWithHeader />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/project/:id" element={<ProjectPage />} />
         </Route>
 
         {/* Pages without header */}

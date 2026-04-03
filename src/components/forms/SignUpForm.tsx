@@ -1,14 +1,14 @@
 import { FormProvider, useForm } from "react-hook-form";
 import type { LoginData } from "../../types/forms";
-import { useRegister } from "../../hooks/useRegister";
 import { AuthForm } from "./AuthForm";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
+import { useRegister } from "../../hooks/useAuth/useRegister";
 
 export const SignUpForm: React.FC = () => {
     
     const form = useForm<LoginData>({
-    mode: "onChange", // или "onBlur"
+        mode: "onChange",
     });
 
     const { mutateAsync, data, isPending, isError } = useRegister();

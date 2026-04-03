@@ -1,16 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import { login } from "../api/auth.api";
+import { register } from "../../api/auth.api";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/auth.store";
-import { queryClient } from "../providers/ReactQueryProvider";
+import { useAuthStore } from "../../store/auth.store";
+import { queryClient } from "../../providers/ReactQueryProvider";
+import type { ILoginResponse } from "../../types/api";
 
-export const useLogin = () => {
+export const useRegister = () => {
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
 
   return useMutation({
-    mutationFn: login,
-    onSuccess: (data) => {
+    mutationFn: register,
+    onSuccess: (data: ILoginResponse) => {
       setUser(data.user);
       navigate("/projects");
       queryClient.invalidateQueries({ queryKey: ["me"] });
@@ -19,4 +20,4 @@ export const useLogin = () => {
       navigate("/login");
     }
   });
-};
+}

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/auth.store";
+import { useAuthStore } from "../../store/auth.store";
 import { useMutation } from "@tanstack/react-query";
-import { logout } from "../api/auth.api";
-import { queryClient } from "../providers/ReactQueryProvider";
+import { logout } from "../../api/auth.api";
+import { queryClient } from "../../providers/ReactQueryProvider";
 
 export const useLogout = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export const useLogout = () => {
         queryClient.invalidateQueries({ queryKey: ["me"] });
     },
     onError: () => {
-        navigate("/login");
+        // navigate("/login");
     }
   });
 };

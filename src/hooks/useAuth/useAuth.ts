@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "../store/auth.store";
-import { checkAuth } from "../api/auth.api";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { checkAuth } from "../../api/auth.api";
+import { useAuthStore } from "../../store/auth.store";
 
 export const useAuth = () => {
     const navigate = useNavigate();
@@ -18,7 +18,6 @@ export const useAuth = () => {
     useEffect(()=>{
         if (query.isSuccess && query.data) {
             setUser(query.data);
-            navigate("/projects");
         }
         if (query.isError) {
             logout();

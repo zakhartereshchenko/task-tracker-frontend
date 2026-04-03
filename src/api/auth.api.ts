@@ -1,25 +1,12 @@
 import { endpoints } from "../constants/api";
-import type { IAuthData } from "../types/api";
-import { apiClient } from "./client";
+import type { User } from "../store/auth.store";
+import type { IAuthData, ILoginResponse } from "../types/api";
+import { api } from "../utils/api";
 
-export const login = (data: IAuthData) =>
-    apiClient(endpoints.login, {
-    method: "POST",
-    body: JSON.stringify(data),
-});
+export const login = (data: IAuthData): Promise<ILoginResponse> => api.post(endpoints.login, data)
 
-export const register = (data: IAuthData) =>
-    apiClient(endpoints.register, {
-    method: "POST",
-    body: JSON.stringify(data),
-});
+export const register = (data: IAuthData): Promise<ILoginResponse> => api.post(endpoints.register, data)
 
-export const logout = () =>
-    apiClient(endpoints.logout, {
-    method: "POST",
-});
+export const logout = () => api.post(endpoints.logout);
 
-export const checkAuth = () => 
-    apiClient(endpoints.me, {
-    method: "GET",
-});
+export const checkAuth = () => api.get<User>(endpoints.me);
