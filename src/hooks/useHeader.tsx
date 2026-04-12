@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { createContext, useState, type ReactNode } from "react";
 
 type HeaderContextType = {
@@ -20,4 +21,14 @@ export const HeaderProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </HeaderContext.Provider>
   );
+};
+
+export const useHeader = () => {
+  const context = useContext(HeaderContext);
+
+  if (!context) {
+    throw new Error("useHeader must be used within HeaderProvider");
+  }
+
+  return context;
 };

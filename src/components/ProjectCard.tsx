@@ -3,19 +3,18 @@ import { useJoinProject } from "../hooks/useProjects/useJoinProject";
 import { Avatar } from "./Avatar"
 import { Button } from "./ui/button"
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
 import { pluralize } from "../utils/ui";
 import clsx from "clsx";
 
 interface IProps {
-    id: string;
+    projectId: string;
     name: string;
     description?: string;
     membersCount: number;
     isMember: boolean;
 }
 
-export const ProjectCard: React.FC<IProps> = ({ id, name, description, membersCount, isMember}) => {
+export const ProjectCard: React.FC<IProps> = ({ projectId, name, description, membersCount, isMember}) => {
     const navigate = useNavigate();
     const {mutateAsync: joinProject, isPending } = useJoinProject();
 
@@ -23,7 +22,7 @@ export const ProjectCard: React.FC<IProps> = ({ id, name, description, membersCo
 
     const handleJoin = async () => {
         try{
-            await joinProject(id)
+            await joinProject(projectId)
             toast.success('You joined the project')
         }catch{
             toast.error('Something went wrong')
@@ -31,7 +30,7 @@ export const ProjectCard: React.FC<IProps> = ({ id, name, description, membersCo
     }
 
     const handleEnter = () => {
-        navigate(`/project/${id}`)
+        navigate(`/project/${projectId}`)
     }
 
     const handleClick = () => {

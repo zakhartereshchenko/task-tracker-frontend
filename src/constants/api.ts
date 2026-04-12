@@ -12,4 +12,12 @@ export const endpoints = {
     getProjects: "/projects",
     joinProject: (id: string) => `/projects/${id}/join`,
     leaveProject: (id: string) => `/projects/${id}/leave`,
+    // Labels
+    createLabel: "/labels",
+    deleteLabel: (id: string) => `/labels/${id}`,
+    getLabels: (id: string) => `/labels/${id}`,
+    // Tasks
+    createTask: (projectId: string) => `/projects/${projectId}/tasks`,
+    getTasks: (projectId: string) => `/projects/${projectId}/tasks`,
+    deleteTask: ({projectId, taskId}: {projectId:string, taskId: string}) => `/projects/${projectId}/tasks/${taskId}`
 }

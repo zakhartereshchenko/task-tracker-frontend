@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './providers/ReactQueryProvider.tsx'
 import { Toaster } from 'sonner'
-import { HeaderProvider } from './context/HeaderContext/HeaderContext.tsx'
+import { HeaderProvider } from './hooks/useHeader.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -25,7 +25,7 @@ export const ProjectsGridView: React.FC<IProps> = ({ title, projects, isLoading 
 
                         return <ProjectCard 
                             key={id} 
-                            id={id} 
+                            projectId={id} 
                             name={name} 
                             description={description} 
                             membersCount={membersCount} 
