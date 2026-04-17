@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { PageContainer } from "../components/layouts"
 import { useGetProject } from "../hooks/useProjects/useGetProject";
 import { TasksTable, Title } from "../components";
@@ -13,14 +13,19 @@ export const ProjectPage = () => {
     const navigate = useNavigate()
     const { projectId } = useParams();
     const { setBackButton } = useHeader()
-    console.log(projectId)
+    const [searchParams] = useSearchParams();
+
+    const labelsQuery = searchParams.get("labels") ?? undefined;
+    const statusQuery = searchParams.get("status") ?? undefined;
+    const priorityQuery = searchParams.get("priority") ?? undefined;
+
     useEffect(()=>{
         setBackButton(<Button onClick={()=>navigate("/projects")}><ArrowBigLeft /> <span>back</span></Button>)
     },[])
 
     const {data: project, isPending} = useGetProject(projectId)
 
-    const {data: tasks, isPending: isPendingTasks} = useGetTasks({projectId})
+    const {data: tasks, isPending: isPendingTasks} = useGetTasks({projectId, labelsQuery, statusQuery, priorityQuery})
 
     const projectName = project?.name;
     const projectDescription = project?.description;
@@ -29,7 +34,7 @@ export const ProjectPage = () => {
 
     return (
         <PageContainer>
-            <Title label={projectName} subTitle={projectDescription} />
+            <Title label={projectName} subTitle={projectDescription} isLoading={isPending} />
             <ProjectFilters />
             <Title label='Available tasks' isLoading={isPendingTasks} badgeCount={tasksCount} />
             {tasks && <TasksTable tasks={tasks} />}

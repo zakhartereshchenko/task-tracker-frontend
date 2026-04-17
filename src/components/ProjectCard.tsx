@@ -20,44 +20,35 @@ export const ProjectCard: React.FC<IProps> = ({ projectId, name, description, me
 
     const membersCountLabel = membersCount > 0 ? `${membersCount} ${pluralize(membersCount, 'member', 'members')}` : 'No members'
 
-    const handleJoin = async () => {
-        try{
-            await joinProject(projectId)
-            toast.success('You joined the project')
-        }catch{
-            toast.error('Something went wrong')
-        }
-    }
-
     const handleEnter = () => {
-        navigate(`/project/${projectId}`)
+        navigate(`/projects/${projectId}`)
     }
 
-    const handleClick = () => {
+    const handleClick = async () => {
         if(isMember){
             handleEnter();
             return;
         }
-        handleJoin();
+        await joinProject(projectId)
     }
     
     return (
-        <li className="border p-4 rounded flex items-center gap-4 justify-between">
-            <div className="flex gap-4">
+        <li className="border p-4 rounded flex flex-col gap-4 justify-between w-full">
+            <div className="flex items-center gap-4 w-full">
                 <Avatar name={name} />
                 <div className="min-w-0">
-                    <h3 className="truncate text-lg">{name}</h3>
-                    <p className="truncate text-sm">{description}</p>
+                    <h3 className="w-full truncate text-lg" >{name}</h3>
                 </div>
             </div>
-            <div className="flex flex-col">
+            <p className="truncate text-sm">{description}</p>
+            <div className="flex">
+                <p>{membersCountLabel}</p>
                 <Button className={clsx("ml-auto w-25", 
                     { "bg-green-600": isMember, })} 
                     disabled={isPending} onClick={handleClick}
                 >
                     {isMember ? "Enter" : "Join"}
                 </Button>
-                <p>{membersCountLabel}</p>
             </div>
             
         </li>

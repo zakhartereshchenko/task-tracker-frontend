@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useDeleteTask } from "../../hooks/useTasks/useDeleteTask";
 import type { ITask } from "../../types/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { useState } from "react";
 
@@ -12,6 +12,7 @@ interface IProps{
 }
 export const ActionsColumn: React.FC<IProps> = ({task}) => {
     const { projectId } = useParams();
+    const navigate = useNavigate()
 
     const [open, setOpen] = useState(false);
 
@@ -22,8 +23,7 @@ export const ActionsColumn: React.FC<IProps> = ({task}) => {
     }
 
     const handleEdit = () => {
-        console.log("edit task", task)
-        // открыть модалку / роут
+        navigate(`/projects/${projectId}/${task.id}`)
     }
 
     const handleDelete = () => {

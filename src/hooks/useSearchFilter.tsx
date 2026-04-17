@@ -12,7 +12,7 @@ export const useSearchFilter = (placeholder?: string) => {
 
     const component = <Input 
         placeholder={placeholder || "Search..."}
-        className="max-w-70"
+        className="w-70"
         value={search}
         onChange={(e) => onChange(e.target.value)}
     />

@@ -7,14 +7,17 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './providers/ReactQueryProvider.tsx'
 import { Toaster } from 'sonner'
 import { HeaderProvider } from './hooks/useHeader.tsx'
+import { TooltipProvider } from './components/ui/tooltip.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <HeaderProvider>
-          <Toaster position="bottom-left" richColors/>
-          <App />
+          <TooltipProvider>
+            <Toaster position="bottom-left" richColors/>
+            <App />
+          </TooltipProvider>
         </HeaderProvider>
       </QueryClientProvider>
     </BrowserRouter>

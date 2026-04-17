@@ -1,3 +1,5 @@
+import type { IGetTasks } from "../api/tasks.api";
+
 export const endpoints = {
     // Auth
     login: "/auth/login",
@@ -19,5 +21,9 @@ export const endpoints = {
     // Tasks
     createTask: (projectId: string) => `/projects/${projectId}/tasks`,
     getTasks: (projectId: string) => `/projects/${projectId}/tasks`,
-    deleteTask: ({projectId, taskId}: {projectId:string, taskId: string}) => `/projects/${projectId}/tasks/${taskId}`
+    getTask: ({projectId, taskId}:{projectId: string, taskId: string}) => `/projects/${projectId}/tasks/${taskId}`,
+    deleteTask: ({projectId, taskId}: {projectId:string, taskId: string}) => `/projects/${projectId}/tasks/${taskId}`,
+    editTask: ({projectId, taskId}: {projectId:string, taskId: string}) => `/projects/${projectId}/tasks/${taskId}`,
+    // Users
+    getUsers: (projectId: string) => `/users/${projectId}`,
 }

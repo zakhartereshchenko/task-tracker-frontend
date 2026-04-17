@@ -4,11 +4,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onRowDoubleClick?: (row: TData) => void
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowDoubleClick,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -43,6 +45,8 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onDoubleClick={() => onRowDoubleClick?.(row.original)}
+                className="cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

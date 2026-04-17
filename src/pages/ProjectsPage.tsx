@@ -3,13 +3,21 @@ import { PageContainer } from "../components/layouts/Container"
 import { useGetProjects } from "../hooks/useProjects/useGetProjects"
 import { useDebounce } from "../hooks/useDebounce"
 import { useSearchParams } from "react-router-dom"
+import { useEffect } from "react"
+import { useHeader } from "../hooks/useHeader"
 
 export const ProjectsPage = () => {
     const [searchParams] = useSearchParams();
     
+    
     const search = searchParams.get("search") || "";
 
     const debauncedQuery = useDebounce(search, 500)
+    const { setBackButton } = useHeader()
+
+    useEffect(()=>{
+        setBackButton(null)
+    },[])
 
     const { data: projects, isPending } = useGetProjects({ filterQuery: debauncedQuery });
 

@@ -11,21 +11,26 @@ import { CreateNewLabelForm } from "./CreateNewLabelForm"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createTaskSchema, type ITaskForm } from "../../constants/forms"
+import { taskSchema, type ITaskForm } from "../../constants/forms"
 import { useGetLabels } from "../../hooks/useLabels/useGetLabels"
 import { useParams } from "react-router-dom"
 import { useCreateTask } from "../../hooks/useTasks/useCreateTask"
 import type { ICreateTask } from "../../api/tasks.api"
 import { toast } from "sonner"
+import { useGetUsers } from "../../hooks/useGetUsers/useGetUsers"
+import { useAuth } from "../../hooks/useAuth/useAuth"
 
 export const CreateTaskForm = () => {
     const { projectId } = useParams();
  
     const [open, setOpen] = useState(false);
     
-    const { register, handleSubmit, formState: { errors }, control } = useForm<z.infer<typeof createTaskSchema>>({
-        resolver: zodResolver(createTaskSchema),
+    const { register, handleSubmit, formState: { errors }, control } = useForm<ITaskForm>({
+        resolver: zodResolver(taskSchema),
         defaultValues: {
+            title: '',
+            description: '',
+            assignee: undefined,
             status: TaskStatus.TODO,
             priority: TaskPriority.MEDIUM,
             labels: [],
@@ -33,6 +38,10 @@ export const CreateTaskForm = () => {
     })
 
     const { data: labels, isPending: isPendingLabel } = useGetLabels(projectId ?? "");
+
+    const { data: users, isPending: isPendingUsers } = useGetUsers(projectId ?? "");
+
+    const { data: me, isPending: isPendingMe } = useAuth();
 
     const { mutateAsync: createTask, isPending: isPendingTask } = useCreateTask();
 
@@ -81,6 +90,37 @@ export const CreateTaskForm = () => {
                             <Label htmlFor="description">Description</Label>
                             <Input {...register("description")} id="description" name="description" placeholder="Write project description..." />
                         </Field>
+
+                        <Controller
+                            control={control}
+                            name="assignee"
+                            render={({ field }) => (
+                                <Field>
+                                    <Label>Assignee</Label>
+                                    <FieldDescription>
+                                        Select user to do a task (only users joined this project)
+                                    </FieldDescription>
+                                    <Select
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select user..." />
+                                        </SelectTrigger>
+
+                                        <SelectContent position="popper">
+                                            {users && users.map(user => {
+                                                const usernameLabel = user.username === me?.username ? `${user.username} (you)` : user.username
+
+                                                return <SelectItem key={user.id} value={user.id}>
+                                                    {usernameLabel}
+                                                </SelectItem>
+                                            })}
+                                        </SelectContent>
+                                    </Select>
+                                </Field>
+                            )}
+                        />
 
                         <Controller
                             control={control}

@@ -32,10 +32,9 @@ export const CreateNewLabelForm = () => {
         }
         try{
             await createLabel(body)
-            toast.success("New label created successfully")
             setOpen(false)
         }catch(error){
-            toast.error(`Failed to create label: ${error}`);
+            
         }
         
     }

@@ -2,20 +2,18 @@ import type { ColumnDef } from "@tanstack/react-table"
 import type { ITask } from "../../types/api"
 import { Badge } from "../ui/badge"
 import { TaskPriority, TaskStatus } from "../../types/projects"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "../ui/button"
-import { useDeleteTask } from "../../hooks/useTasks/useDeleteTask"
 import { ActionsColumn } from "./ActionsColumn"
+import { Button } from "../ui/button"
+import { ArrowUpDown } from "lucide-react"
 
 const getFormattedPriorityTextAndColor = (value: TaskPriority) => {
     switch(value){
         case TaskPriority.LOW:
             return {text: 'Low', color: 'bg-blue-300'}
         case TaskPriority.MEDIUM:
-            return {text: 'Medium', color: 'bg-yellow-300'}
+            return {text: 'Medium', color: 'bg-yellow-600'}
         case TaskPriority.HIGH:
-            return {text: 'High', color: 'bg-red-400'}
+            return {text: 'High', color: 'bg-red-500'}
         default:
             const _:never = value;
             throw new Error(`Unhandled priority: ${value}`);
@@ -25,13 +23,13 @@ const getFormattedPriorityTextAndColor = (value: TaskPriority) => {
 const getFormattedStatusTextAndColor = (value: TaskStatus) => {
     switch(value){
         case TaskStatus.DONE:
-            return {text: 'Done', color: "bg-green-300"}
+            return {text: 'Done', color: "bg-green-500"}
         case TaskStatus.IN_PROGRESS:
-            return {text: 'In progress', color: "bg-blue-300"}
+            return {text: 'In progress', color: "bg-blue-500"}
         case TaskStatus.IN_REVIEW:
-            return {text: 'In review', color: "bg-yellow-200"}
+            return {text: 'In review', color: "bg-yellow-600"}
         case TaskStatus.TODO:
-            return {text: 'To do', color:"bg-gray-200"}
+            return {text: 'To do', color:"bg-gray-500"}
         default:
             const _:never = value;
             throw new Error(`Unhandled status: ${value}`);
@@ -51,22 +49,22 @@ export const columns: ColumnDef<ITask>[] = [
     },
   },
 
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => {
-      const description = row.getValue("description") as string;
+  // {
+  //   accessorKey: "description",
+  //   header: "Description",
+  //   cell: ({ row }) => {
+  //     const description = row.getValue("description") as string;
 
-      return (
-        <div 
-            className="w-[150px] truncate font-medium" 
-            title={description}
-        >
-          {description || "—" }
-        </div>
-      )
-    },
-  },
+  //     return (
+  //       <div 
+  //           className="w-[150px] truncate font-medium" 
+  //           title={description}
+  //       >
+  //         {description || "—" }
+  //       </div>
+  //     )
+  //   },
+  // },
 
   {
     accessorKey: "status",

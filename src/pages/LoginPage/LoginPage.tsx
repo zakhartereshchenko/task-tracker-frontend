@@ -32,7 +32,6 @@ export const LoginPage = () => {
                                 <h4>Don't have an account?</h4>
                                 <Button
                                     variant="outline"
-                                    className="text-primary hover:text-primary"
                                     onClick={() => setMode(LOGIN_MODE.SIGN_UP)}
                                 >
                                     Sign up
@@ -45,7 +44,6 @@ export const LoginPage = () => {
                                 <h4>Already have an account?</h4>
                                 <Button
                                     variant="outline"
-                                    className="text-primary hover:text-primary"
                                     onClick={() => setMode(LOGIN_MODE.SIGN_IN)}
                                 >
                                     Sign in

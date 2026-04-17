@@ -57,3 +57,9 @@ export const TaskPriority = {
 export const TaskPriorityArray = Object.values(TaskPriority)
 
 export type TaskPriority = (typeof TaskPriority)[keyof typeof TaskPriority];
+
+export const TaskPriorityLabels: Record<TaskPriority, string> = {
+  [TaskPriority.HIGH]: 'High',
+  [TaskPriority.MEDIUM]: 'Medium',
+  [TaskPriority.LOW]: 'Low',
+}

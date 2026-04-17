@@ -6,7 +6,6 @@ import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import type { IProjectForm } from "../../types/forms"
 import { useCreateProject } from "../../hooks/useProjects/useCreateProject"
-import { toast } from "sonner"
 import { useState } from "react"
 
 export const CreateProjectForm = () => {
@@ -19,10 +18,9 @@ export const CreateProjectForm = () => {
     const submit = async(data: IProjectForm) => {
         try{
             await createProject(data)
-            toast.success("Project created successfully");
             setOpen(false);
         }catch(error){
-            toast.error(`Failed to create project: ${error}`);
+            
         }
     }
 

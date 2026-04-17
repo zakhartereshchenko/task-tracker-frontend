@@ -1,8 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import type { LoginData } from "../../types/forms";
 import { AuthForm } from "./AuthForm";
-import { toast } from "sonner";
-import { Spinner } from "../ui/spinner";
 import { useRegister } from "../../hooks/useAuth/useRegister";
 
 export const SignUpForm: React.FC = () => {
@@ -13,10 +11,12 @@ export const SignUpForm: React.FC = () => {
 
     const { mutateAsync, data, isPending, isError } = useRegister();
 
-    const handleSignUp = (data: LoginData) => {
-        mutateAsync(data)
-        .then(()=> toast.success("Signed up successfully" ))
-        .catch((error)=> toast.error(`${error.error}` ))
+    const handleSignUp = async (data: LoginData) => {
+        try{
+            await mutateAsync(data)
+        }catch(error){
+
+        }
     }
 
     return (

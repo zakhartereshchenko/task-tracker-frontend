@@ -5,7 +5,15 @@ export const LOGIN_MODE = {
     SIGN_UP: 'sign-up',
 } as const;
 
-export const createTaskSchema = z.object({
+export const labelSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  color: z.string().nullable(),
+  projectId: z.string(),
+  createdAt: z.string(),
+})
+
+export const taskSchema = z.object({
     title: z
     .string()
     .min(1, "Title is required")
@@ -31,7 +39,7 @@ export const createTaskSchema = z.object({
     .optional(),
 })
 
-export interface ITaskForm extends z.infer<typeof createTaskSchema> {}
+export interface ITaskForm extends z.infer<typeof taskSchema> {}
 
 export const createLabelSchema = z.object({
     label: z

@@ -1,24 +1,30 @@
 import { useEffect } from "react";
-import { useAuthStore } from "../store/auth.store";
 import { AuthButtons } from "./AuthButtons"
 import { Button } from "./ui/button";
 import { Container } from "./layouts";
 import { Avatar } from "./Avatar";
 import { useLogout } from "../hooks/useAuth/useLogout";
 import { useHeader } from "../hooks/useHeader";
+import { useAuth } from "../hooks/useAuth/useAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const Header = () => {
-    const { backButton } = useHeader();
-    const user = useAuthStore((store) => store.user);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log("Current user:", user);
-    }, [user]);
+    const { backButton } = useHeader();
+    const { data: user } = useAuth()
 
     const {mutateAsync, isPending } = useLogout();
 
     const handleLogout = async () => {
-        await mutateAsync();
+        try{
+            await mutateAsync();
+            navigate("/login");
+            toast.success('Loged out successfully!')
+        }catch(error){
+            toast.error(`Something went wrong: ${error}`)
+        }
     }
     
     return (

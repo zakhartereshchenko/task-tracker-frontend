@@ -1,5 +1,10 @@
 import type { IProjectListItem, TaskStatus, TaskPriority, User } from "./projects";
 
+export interface IQuery {
+  name: string;
+  value: string | string[] | undefined;
+}
+
 export interface IAuthData {
     username: string;
     password: string;
