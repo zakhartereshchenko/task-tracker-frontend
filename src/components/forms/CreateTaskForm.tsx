@@ -5,11 +5,10 @@ import { Field, FieldDescription, FieldError, FieldGroup } from "../ui/field"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { useState } from "react"
-import { TaskPriority, TaskPriorityArray, TaskStatus, TaskStatusArray, TaskStatusLabels } from "../../types/projects"
+import { TaskPriority, TaskPriorityArray, TaskPriorityLabels, TaskStatus, TaskStatusArray, TaskStatusLabels } from "../../types/projects"
 import { MultiSelect, MultiSelectContent, MultiSelectGroup, MultiSelectItem, MultiSelectTrigger, MultiSelectValue } from "../ui/multi-select"
 import { CreateNewLabelForm } from "./CreateNewLabelForm"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { taskSchema, type ITaskForm } from "../../constants/forms"
 import { useGetLabels } from "../../hooks/useLabels/useGetLabels"
@@ -202,7 +201,7 @@ export const CreateTaskForm = () => {
                                         <SelectContent position="popper">
                                             {TaskPriorityArray.map(label => (
                                                 <SelectItem key={label} value={label}>
-                                                    {label}
+                                                    {TaskPriorityLabels[label]}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>

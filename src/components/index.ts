@@ -5,8 +5,8 @@ import { Avatar } from "./Avatar";
 import { ProjectsFilters } from "./ProjectsFilters";
 import { ProjectCard } from "./ProjectCard";
 import { Title } from "./Title";
-import { ProjectFilters } from "./ProjectFilters";
 import { TasksTable } from "./TasksTable/TasksTable";
 import { ConfirmationModal } from "./ConfirmationModal";
+import { TasksGridView } from './TasksGridView/TasksGridView'
 
-export { Header, AuthButtons, ProjectsGridView, Avatar, ProjectsFilters, ProjectCard, Title, ProjectFilters, TasksTable, ConfirmationModal };
+export { Header, AuthButtons, ProjectsGridView, Avatar, ProjectsFilters, ProjectCard, Title, TasksTable, ConfirmationModal, TasksGridView };

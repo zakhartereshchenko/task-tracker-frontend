@@ -1,10 +1,9 @@
-import { useEffect, type FC } from "react"
-import { Field, FieldDescription, FieldError, FieldGroup } from "../../ui/field"
+import { useEffect } from "react"
+import { Field, FieldDescription, FieldError } from "../../ui/field"
 import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { Controller, useForm } from "react-hook-form"
 import { MultiSelect, MultiSelectContent, MultiSelectGroup, MultiSelectItem, MultiSelectTrigger, MultiSelectValue } from "../../ui/multi-select"
-import { CreateNewLabelForm } from "../CreateNewLabelForm"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select"
 import { TaskPriority, TaskPriorityArray, TaskPriorityLabels, TaskStatus, TaskStatusArray, TaskStatusLabels } from "../../../types/projects"
 import { taskSchema, type ITaskForm } from "../../../constants/forms"
@@ -19,20 +18,18 @@ import { formatDate } from "../../../utils/ui"
 import { useEditTask } from "../../../hooks/useTasks/useEditTask"
 import { Button } from "../../ui/button"
 import { EditTaskFormSkeleton } from "./Skeleton"
+import { Spinner } from "../../ui/spinner"
 
-interface IProps{
-}
-
-export const EditTaskForm: FC<IProps> = () => {
-    const { projectId, taskId } = useParams();
-
-    if (!projectId || !taskId) {
-        return <div>Invalid route</div>
-    }
+export const EditTaskForm = () => {
+    const { projectId = '', taskId = '' } = useParams();
 
     const { mutateAsync: editTask, isPending: isPendingEditing } = useEditTask()
 
     const {data: task, isPending: isPendingTask} = useGetTask({ projectId, taskId })
+
+    console.log('taskId', taskId )
+    console.log('projectId', projectId )
+    console.log('task', task)
 
     const { data: labels, isPending: isPendingLabel } = useGetLabels(projectId ?? "");
 
@@ -40,7 +37,7 @@ export const EditTaskForm: FC<IProps> = () => {
 
     const { data: me, isPending: isPendingMe } = useAuth();
     
-    const { register, handleSubmit, reset, watch, formState: { errors, isDirty }, control } = useForm<ITaskForm>({
+    const { register, handleSubmit, reset, formState: { errors, isDirty }, control } = useForm<ITaskForm>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
             title: task?.title,
@@ -66,13 +63,6 @@ export const EditTaskForm: FC<IProps> = () => {
         })
     }, [task, reset])
 
-    const values = watch()
-
-    useEffect(() => {
-        console.log("FORM VALUES:", values)
-        console.log('task', task)
-    }, [values])
-
     const submit = async(data: ITaskForm) => {
         try{
             await editTask({
@@ -93,7 +83,7 @@ export const EditTaskForm: FC<IProps> = () => {
         <form onSubmit={handleSubmit(submit)} className="flex gap-6">
             <div className="flex flex-col flex-1 gap-3.5">
                 <Field data-invalid={!!errors.title} className="relative">
-                    <Input {...register("title")} aria-invalid={!!errors.title} id="title" name="title" placeholder="Write title..." className="!text-2xl p-0"/>
+                    <Input {...register("title")} aria-invalid={!!errors.title} id="title" name="title" placeholder="Write title..." className="!text-xl"/>
                     {errors.title && (
                         <FieldError className="absolute -bottom-5">
                             {errors.title?.message as string}
@@ -101,7 +91,7 @@ export const EditTaskForm: FC<IProps> = () => {
                     )}
                 </Field>
                 <Field data-invalid={!!errors.title} className="relative">
-                    <Textarea {...register("description")} aria-invalid={!!errors.title} id="description" name="description" placeholder="Write description..." className="!text-l p-0 resize-none min-h-70"/>
+                    <Textarea {...register("description")} aria-invalid={!!errors.title} id="description" name="description" placeholder="Write description..." className="!text-l resize-none min-h-70"/>
                 </Field>
             </div>
             <div className="w-70 flex flex-col gap-5">
@@ -223,117 +213,10 @@ export const EditTaskForm: FC<IProps> = () => {
                     <p>Published by: {task?.createdBy?.username}</p>
                     {task?.createdAt && <p>{formatDate(task?.createdAt)}</p>}
                 </div>
-                <Button disabled={!isDirty}>Save changes</Button>
+                <Button disabled={!isDirty}>
+                    {isPendingEditing ? <><Spinner /> Saving</> : 'Save changes'}
+                </Button>
             </div>
         </form>
-        
-        // <form onSubmit={handleSubmit(()=>{})} className="flex flex-col gap-3.5">
-        //     <FieldGroup>
-        //         <Field data-invalid={!!errors.title} className="relative">
-        //             <Label htmlFor="title">Title</Label>
-        //             <Input {...register("title")} aria-invalid={!!errors.title} id="title" name="title" placeholder="Write title..." />
-        //             {errors.title && (
-        //                 <FieldError className="absolute -bottom-5">
-        //                     {errors.title?.message as string}
-        //                 </FieldError>
-        //             )}
-        //         </Field>
-
-        //         <Field>
-        //             <Label htmlFor="description">Description</Label>
-        //             <Input {...register("description")} id="description" name="description" placeholder="Write project description..." />
-        //         </Field>
-
-        //         <Controller
-        //             control={control}
-        //             name="labels"
-        //             render={({ field }) => (
-        //                 <Field>
-        //                     <Label htmlFor="labels">Labels</Label>
-        //                     <MultiSelect
-        //                         values={field.value}
-        //                         onValuesChange={field.onChange}
-        //                     >
-        //                         <MultiSelectTrigger className="w-full">
-        //                             <MultiSelectValue placeholder="Select labels..." />
-        //                         </MultiSelectTrigger>
-        //                         <MultiSelectContent>
-        //                             <MultiSelectGroup>
-        //                                 {labels && labels.map(label => (
-        //                                     <MultiSelectItem key={label.id} value={label.id}>
-        //                                         {label.name}
-        //                                     </MultiSelectItem>
-        //                                 ))}
-        //                             </MultiSelectGroup>
-        //                         </MultiSelectContent>
-        //                     </MultiSelect>
-        //                 </Field>
-        //             )}
-        //         />
-
-        //         <CreateNewLabelForm />
-
-        //         <Controller
-        //             control={control}
-        //             name="status"
-        //             render={({ field }) => (
-        //                 <Field>
-        //                     <Label>Status</Label>
-        //                     <FieldDescription>
-        //                         Select task status
-        //                     </FieldDescription>
-        //                     <Select
-        //                         value={field.value}
-        //                         onValueChange={field.onChange}
-        //                         defaultValue={TaskStatus.TODO}
-        //                     >
-        //                         <SelectTrigger className="w-full">
-        //                             <SelectValue placeholder="Select status..." />
-        //                         </SelectTrigger>
-
-        //                         <SelectContent position="popper">
-        //                             {TaskStatusArray.map(label => (
-        //                                 <SelectItem key={label} value={label}>
-        //                                     {TaskStatusLabels[label]}
-        //                                 </SelectItem>
-        //                             ))}
-        //                         </SelectContent>
-        //                     </Select>
-        //                 </Field>
-        //             )}
-        //         />
-
-        //         <Controller
-        //             control={control}
-        //             name="priority"
-        //             render={({ field }) => (
-        //                 <Field>
-        //                     <Label>Priority</Label>
-        //                     <FieldDescription>
-        //                         Select task priority
-        //                     </FieldDescription>
-        //                     <Select
-        //                         value={field.value}
-        //                         onValueChange={field.onChange}
-        //                         defaultValue={TaskPriority.MEDIUM}
-        //                     >
-        //                         <SelectTrigger className="w-full">
-        //                             <SelectValue placeholder="Select priority..." />
-        //                         </SelectTrigger>
-
-        //                         <SelectContent position="popper">
-        //                             {TaskPriorityArray.map(label => (
-        //                                 <SelectItem key={label} value={label}>
-        //                                     {label}
-        //                                 </SelectItem>
-        //                             ))}
-        //                         </SelectContent>
-        //                     </Select>
-        //                 </Field>
-        //             )}
-        //         />
-                
-        //     </FieldGroup> 
-        // </form>
     )
 }

@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth/useAuth";
 export const AuthGuard = () => {
     const {data: user, isLoading, isError } = useAuth();
 
-    if (isLoading) return null; // или loader
+    if (isLoading) return null;
 
     if (isError || !user) {
         return <Navigate to="/login" replace />;

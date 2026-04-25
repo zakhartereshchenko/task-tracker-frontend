@@ -6,6 +6,7 @@ import type { ITask } from "../../types/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface IProps{
     task: ITask,
@@ -20,6 +21,7 @@ export const ActionsColumn: React.FC<IProps> = ({task}) => {
 
     const handleCopyId = () => {
         navigator.clipboard.writeText(task.id)
+        toast.success('Task id copied to clipboard!')
     }
 
     const handleEdit = () => {
@@ -55,7 +57,7 @@ export const ActionsColumn: React.FC<IProps> = ({task}) => {
 
             <DropdownMenuItem
                 // onClick={handleDelete}
-                onSelect={(e) => {
+                onSelect={() => {
                     setOpen(true)
                 }}
                 className="text-destructive"

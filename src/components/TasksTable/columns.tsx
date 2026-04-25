@@ -3,38 +3,7 @@ import type { ITask } from "../../types/api"
 import { Badge } from "../ui/badge"
 import { TaskPriority, TaskStatus } from "../../types/projects"
 import { ActionsColumn } from "./ActionsColumn"
-import { Button } from "../ui/button"
-import { ArrowUpDown } from "lucide-react"
-
-const getFormattedPriorityTextAndColor = (value: TaskPriority) => {
-    switch(value){
-        case TaskPriority.LOW:
-            return {text: 'Low', color: 'bg-blue-300'}
-        case TaskPriority.MEDIUM:
-            return {text: 'Medium', color: 'bg-yellow-600'}
-        case TaskPriority.HIGH:
-            return {text: 'High', color: 'bg-red-500'}
-        default:
-            const _:never = value;
-            throw new Error(`Unhandled priority: ${value}`);
-    }
-}
-
-const getFormattedStatusTextAndColor = (value: TaskStatus) => {
-    switch(value){
-        case TaskStatus.DONE:
-            return {text: 'Done', color: "bg-green-500"}
-        case TaskStatus.IN_PROGRESS:
-            return {text: 'In progress', color: "bg-blue-500"}
-        case TaskStatus.IN_REVIEW:
-            return {text: 'In review', color: "bg-yellow-600"}
-        case TaskStatus.TODO:
-            return {text: 'To do', color:"bg-gray-500"}
-        default:
-            const _:never = value;
-            throw new Error(`Unhandled status: ${value}`);
-    }
-}
+import { getFormattedPriorityTextAndColor, getFormattedStatusTextAndColor } from "../../utils/ui"
 
 export const columns: ColumnDef<ITask>[] = [
   {

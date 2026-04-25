@@ -1,8 +1,7 @@
-import { useFormContext, useFormState, type UseFormReturn } from "react-hook-form";
+import { useFormContext, useFormState } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
-import { useEffect } from "react";
 import { Spinner } from "../ui/spinner";
 
 type AuthFormData = {
@@ -21,11 +20,6 @@ export const AuthForm = ({ onSubmit, submitText, isSending }: IProps) => {
     const { register, handleSubmit, control } =  useFormContext<AuthFormData>();
 
     const { errors } = useFormState({ control });
-
-    console.log(errors)
-    useEffect(() => {
-        console.log("errors changed:", errors);
-    }, [errors]);
     
     return (
         <form className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>

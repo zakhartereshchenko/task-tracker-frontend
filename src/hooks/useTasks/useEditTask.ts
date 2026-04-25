@@ -13,10 +13,13 @@ export const useEditTask = () => {
             queryClient.setQueryData([TASKS_QUERY_KEY, data.projectId], (oldData: ITask[]) => {
                 if (!oldData) return [data]
 
-                return oldData.map(task => task.id === data.id ? data : task)
+                return oldData.map(task => task.id === data.id 
+                    ? data 
+                    : task
+                )
             })
             toast.success("Task edited successfully");
         },
-        onError: (error) => toast.error(`Something went wrong: ${error}`)
+        onError: (error) => toast.error(`Something went wrong: ${error}`),
     });
 };

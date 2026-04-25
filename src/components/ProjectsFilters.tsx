@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import { CreateProjectForm } from "./forms"
 import { useSearchFilter } from "../hooks/useSearchFilter";
+import { CreateProjectForm } from "./forms";
 
 interface IProps {
     placeholder?: string;

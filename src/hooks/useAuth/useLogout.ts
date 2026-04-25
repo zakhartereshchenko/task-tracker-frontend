@@ -7,7 +7,9 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["me"] });
+        queryClient.removeQueries({
+          queryKey: ["me"],
+        });
     }
   });
 };

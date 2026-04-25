@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { AuthButtons } from "./AuthButtons"
 import { Button } from "./ui/button";
 import { Container } from "./layouts";
@@ -8,6 +7,9 @@ import { useHeader } from "../hooks/useHeader";
 import { useAuth } from "../hooks/useAuth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Separator } from "./ui/separator";
+import { LogOut } from "lucide-react";
+import { Spinner } from "./ui/spinner";
 
 export const Header = () => {
     const navigate = useNavigate();
@@ -28,11 +30,10 @@ export const Header = () => {
     }
     
     return (
-        <div className="border-b border-gray-300 border-dashed">
+        <div className="">
             <Container>
                 <header className="flex items-center justify-between py-3">
                     <div className="flex flex-row gap-4">
-                        <h3>Logo</h3>
                         {backButton}
                     </div>
 
@@ -41,6 +42,7 @@ export const Header = () => {
                             <span>Welcome, {user.username}!</span>
                             <Avatar name={user.username} />
                             <Button variant="outline" onClick={handleLogout}>
+                                {isPending ? <Spinner /> : <LogOut />}
                                 Logout
                             </Button>
                             
@@ -50,6 +52,7 @@ export const Header = () => {
                     )}
                 </header>
             </Container>
+            <Separator />
         </div>
         
     )

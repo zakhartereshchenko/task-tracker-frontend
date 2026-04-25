@@ -1,0 +1,1 @@
+export type TViewMode = 'table' | 'kanban'
