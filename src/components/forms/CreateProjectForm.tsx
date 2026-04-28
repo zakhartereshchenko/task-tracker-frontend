@@ -10,17 +10,18 @@ import { useState } from "react"
 
 export const CreateProjectForm = () => {
     const [open, setOpen] = useState(false);
-    
-    const { register, handleSubmit, formState: { errors } } = useForm<IProjectForm>()
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<IProjectForm>()
 
     const { mutateAsync: createProject, isPending } = useCreateProject();
 
-    const submit = async(data: IProjectForm) => {
-        try{
+    const submit = async (data: IProjectForm) => {
+        try {
             await createProject(data)
+            reset()
             setOpen(false);
-        }catch(error){
-            
+        } catch (error) {
+            console.warn(error)
         }
     }
 
@@ -59,7 +60,7 @@ export const CreateProjectForm = () => {
                         <Button type="submit" disabled={isPending}>
                             {isPending ? "Creating..." : "Create"}
                         </Button>
-                    </DialogFooter>  
+                    </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>

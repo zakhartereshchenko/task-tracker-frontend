@@ -17,7 +17,7 @@ export const useChangeTaskStatus = () => {
 
             const previousTasks = queryClient.getQueryData<ITask[]>(queryKey);
 
-            queryClient.setQueriesData<ITask[]>({queryKey}, (oldData = []) => {
+            queryClient.setQueriesData<ITask[]>({ queryKey }, (oldData = []) => {
                 return oldData.map(task =>
                     task.id === variables.taskId
                         ? { ...task, status: variables.body.status as TaskStatus }
@@ -32,7 +32,7 @@ export const useChangeTaskStatus = () => {
 
             queryClient.setQueryData<ITask[]>(queryKey, (old = []) => {
                 return old.map(task =>
-                task.id === data.id ? data : task
+                    task.id === data.id ? data : task
                 );
             });
 

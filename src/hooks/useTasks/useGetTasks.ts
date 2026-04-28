@@ -14,12 +14,12 @@ interface IProps {
     filters?: IFilters
 }
 
-export const useGetTasks = ({projectId, filters}: IProps) => {
-    const {labelsQuery, statusQuery, priorityQuery, titleQuery} = filters ?? {};
+export const useGetTasks = ({ projectId, filters }: IProps) => {
+    const { labelsQuery, statusQuery, priorityQuery, titleQuery } = filters ?? {};
 
     return useQuery({
-        queryKey: [TASKS_QUERY_KEY, projectId, statusQuery, labelsQuery, priorityQuery, titleQuery],
-        queryFn: () => getTasks({projectId: projectId!, labelsQuery, statusQuery, priorityQuery, titleQuery}),
+        queryKey: [TASKS_QUERY_KEY, projectId, labelsQuery, statusQuery, priorityQuery, titleQuery],
+        queryFn: () => getTasks({ projectId: projectId!, labelsQuery, statusQuery, priorityQuery, titleQuery }),
         enabled: !!projectId,
     });
 }

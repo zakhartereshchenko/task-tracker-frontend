@@ -11,14 +11,14 @@ export const useCreateTask = () => {
     mutationFn: createTask,
     onSuccess: (data) => {
       // queryClient.invalidateQueries({
-      //   queryKey: ["tasks"],
+      //   queryKey: [TASKS_QUERY_KEY, data.projectId],
       // });
-      queryClient.setQueryData([TASKS_QUERY_KEY, data.projectId], (oldData: ITask[]) => {
+      queryClient.setQueriesData({ queryKey: [TASKS_QUERY_KEY, data.projectId] }, (oldData: ITask[] | undefined) => {
         if (!oldData) {
           return [data]
         }
-
-        return [...oldData, data]})
+        return [...oldData, data]
+      })
     },
   });
 };

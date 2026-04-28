@@ -10,16 +10,13 @@ import { createLabelSchema } from "../../constants/forms"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateLabel } from "../../hooks/useLabels/useCreateLabel"
 import { useParams } from "react-router-dom"
-import { toast } from "sonner"
-
-
 
 export const CreateNewLabelForm = () => {
     const { projectId } = useParams();
-    
+
     const [open, setOpen] = useState(false);
-    
-    const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof createLabelSchema>>({
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<z.infer<typeof createLabelSchema>>({
         resolver: zodResolver(createLabelSchema),
     })
 
@@ -30,13 +27,13 @@ export const CreateNewLabelForm = () => {
             ...data,
             projectId: projectId
         }
-        try{
+        try {
             await createLabel(body)
+            reset()
             setOpen(false)
-        }catch(error){
-            
+        } catch (error) {
+            console.warn(error)
         }
-        
     }
 
     return (
@@ -45,7 +42,15 @@ export const CreateNewLabelForm = () => {
                 <Button variant="outline">Create new label</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-sm">
-                <form onSubmit={handleSubmit(handleCreateLabel)} className="flex flex-col gap-3.5">
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleSubmit(handleCreateLabel)(e)
+                    }
+                    }
+                    className="flex flex-col gap-3.5"
+                >
                     <DialogHeader>
                         <DialogTitle>Create new label</DialogTitle>
                         <DialogDescription>
@@ -70,7 +75,7 @@ export const CreateNewLabelForm = () => {
                         <Button type="submit">
                             Create new label
                         </Button>
-                    </DialogFooter>  
+                    </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>

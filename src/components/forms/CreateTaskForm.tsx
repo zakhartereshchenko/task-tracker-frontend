@@ -24,7 +24,7 @@ export const CreateTaskForm = () => {
 
     const [open, setOpen] = useState(false);
 
-    const { register, handleSubmit, formState: { errors }, control } = useForm<ITaskForm>({
+    const { register, handleSubmit, reset, formState: { errors }, control } = useForm<ITaskForm>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
             title: '',
@@ -55,6 +55,7 @@ export const CreateTaskForm = () => {
         try {
             await createTask(obj)
             toast.success("Project created successfully");
+            reset()
             setOpen(false);
         } catch (error) {
             toast.error(`Failed to create project: ${error}`);

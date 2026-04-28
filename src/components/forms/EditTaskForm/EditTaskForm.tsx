@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Field, FieldDescription, FieldError } from "../../ui/field"
 import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
@@ -9,77 +8,60 @@ import { TaskPriority, TaskPriorityArray, TaskPriorityLabels, TaskStatus, TaskSt
 import { taskSchema, type ITaskForm } from "../../../constants/forms"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useGetLabels } from "../../../hooks/useLabels/useGetLabels"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Textarea } from "../../ui/textarea"
-import { useGetTask } from "../../../hooks/useTasks/useGetTask"
 import { useGetUsers } from "../../../hooks/useGetUsers/useGetUsers"
 import { useAuth } from "../../../hooks/useAuth/useAuth"
 import { formatDate } from "../../../utils/ui"
 import { useEditTask } from "../../../hooks/useTasks/useEditTask"
 import { Button } from "../../ui/button"
-import { EditTaskFormSkeleton } from "./Skeleton"
 import { Spinner } from "../../ui/spinner"
+import type { FC } from "react"
+import type { ITask } from "../../../types/api"
 
-export const EditTaskForm = () => {
+interface IProps {
+    task: ITask
+}
+
+export const EditTaskForm: FC<IProps> = ({ task }) => {
+    const navigate = useNavigate();
     const { projectId = '', taskId = '' } = useParams();
-
     const { mutateAsync: editTask, isPending: isPendingEditing } = useEditTask()
+    const { data: labels } = useGetLabels(projectId)
+    const { data: users } = useGetUsers(projectId)
+    const { data: me } = useAuth()
 
-    const {data: task, isPending: isPendingTask} = useGetTask({ projectId, taskId })
-
-    const { data: labels, isPending: isPendingLabel } = useGetLabels(projectId ?? "");
-
-    const { data: users, isPending: isPendingUsers } = useGetUsers(projectId ?? "");
-
-    const { data: me, isPending: isPendingMe } = useAuth();
-    
     const { register, handleSubmit, reset, formState: { errors, isDirty }, control } = useForm<ITaskForm>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
-            title: task?.title,
-            description: task?.description,
-            status: task?.status,
-            priority: task?.priority,
-            labels: task?.labels.map(label => label.id),
-            assignee: task?.assignee?.id,
-        },
-    })
-
-    // set initial state for react hook form
-    useEffect(() => {
-        if (!task) return
-
-        reset({
             title: task.title,
             description: task.description,
             status: task.status,
             priority: task.priority,
-            labels: task.labels?.map(l => l.id),
-            assignee: task.assignee?.id
-        })
-    }, [task, reset])
+            labels: task.labels.map(label => label.id),
+            assignee: task.assignee?.id ?? '',
+        },
+    })
 
-    const submit = async(data: ITaskForm) => {
-        try{
+    const submit = async (data: ITaskForm) => {
+        try {
             await editTask({
-                projectId, 
-                taskId, 
+                projectId,
+                taskId,
                 body: data
             })
-        }catch(error){
+            reset()
+            navigate(`/projects/${projectId}`)
+        } catch (error) {
             console.warn(error)
         }
-    }
-
-    if(isPendingTask){
-        return <EditTaskFormSkeleton />
     }
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex gap-6">
             <div className="flex flex-col flex-1 gap-3.5">
                 <Field data-invalid={!!errors.title} className="relative">
-                    <Input {...register("title")} aria-invalid={!!errors.title} id="title" name="title" placeholder="Write title..." className="!text-xl"/>
+                    <Input {...register("title")} aria-invalid={!!errors.title} id="title" name="title" placeholder="Write title..." className="!text-xl" />
                     {errors.title && (
                         <FieldError className="absolute -bottom-5">
                             {errors.title?.message as string}
@@ -87,7 +69,7 @@ export const EditTaskForm = () => {
                     )}
                 </Field>
                 <Field data-invalid={!!errors.title} className="relative">
-                    <Textarea {...register("description")} aria-invalid={!!errors.title} id="description" name="description" placeholder="Write description..." className="!text-l resize-none min-h-70"/>
+                    <Textarea {...register("description")} aria-invalid={!!errors.title} id="description" name="description" placeholder="Write description..." className="!text-l resize-none min-h-70" />
                 </Field>
             </div>
             <div className="w-70 flex flex-col gap-5">
@@ -101,9 +83,8 @@ export const EditTaskForm = () => {
                                 Select task status
                             </FieldDescription>
                             <Select
-                                value={field.value}
+                                value={field.value ?? TaskStatus.TODO}
                                 onValueChange={field.onChange}
-                                defaultValue={TaskStatus.TODO}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select status..." />

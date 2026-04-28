@@ -5,22 +5,22 @@ import { useHeader } from "../hooks/useHeader";
 import { useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
-import { EditTaskForm } from "../components/forms";
+import { EditTaskFormContainer } from "../components/forms";
 
 export const TaskPage = () => {
     const navigate = useNavigate()
     const { projectId } = useParams();
 
     const { setBackButton } = useHeader()
-    
-    useEffect(()=>{
-        setBackButton(<Button onClick={()=>navigate(`/projects/${projectId}`)}><ArrowBigLeft /> <span>back</span></Button>)
-    },[])
+
+    useEffect(() => {
+        setBackButton(<Button onClick={() => navigate(`/projects/${projectId}`)}><ArrowBigLeft /> <span>back</span></Button>)
+    }, [])
 
     return (
         <PageContainer>
             <Title label="Edit your task" subTitle="You can edit any field of this task" />
-            <EditTaskForm />
+            <EditTaskFormContainer />
         </PageContainer>
     )
 }

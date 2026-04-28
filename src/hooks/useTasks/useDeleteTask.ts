@@ -10,13 +10,16 @@ export const useDeleteTask = (projectId?: string) => {
   return useMutation({
     mutationFn: deleteTask,
     onSuccess: (data) => {
-        queryClient.setQueryData([TASKS_QUERY_KEY, projectId], (oldData: ITask[]) => {
-            const newData = oldData.filter(item => item.id !== data.id)
+      // queryClient.invalidateQueries({
+      //   queryKey: [TASKS_QUERY_KEY, data.projectId],
+      // });
+      queryClient.setQueriesData({ queryKey: [TASKS_QUERY_KEY, data.projectId] }, (oldData: ITask[] | undefined) => {
 
-            return newData
-        })
-        toast.success('Task deleted successfully!')
+        return oldData ? oldData.filter((task) => task.id !== data.id) : [];
+      })
+
+      toast.success('Task deleted successfully!')
     },
-    onError: (error)=> toast.error(`Something went wrong: ${error}`)
+    onError: (error) => toast.error(`Something went wrong: ${error}`)
   });
 };

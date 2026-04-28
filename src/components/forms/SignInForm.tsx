@@ -25,12 +25,6 @@ export const SignInForm: React.FC = () => {
             navigate("/login");
         }
     }
-    // console.log(user)
-    // useEffect(()=>{
-    //     if(!user) return;
-
-    //     navigate("/projects");
-    // },[user, navigate])
 
     return (
         <FormProvider {...form}>
