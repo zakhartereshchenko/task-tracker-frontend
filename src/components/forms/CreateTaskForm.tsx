@@ -21,9 +21,9 @@ import { useAuth } from "../../hooks/useAuth/useAuth"
 
 export const CreateTaskForm = () => {
     const { projectId } = useParams();
- 
+
     const [open, setOpen] = useState(false);
-    
+
     const { register, handleSubmit, formState: { errors }, control } = useForm<ITaskForm>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
@@ -44,19 +44,19 @@ export const CreateTaskForm = () => {
 
     const { mutateAsync: createTask, isPending: isPendingTask } = useCreateTask();
 
-    const submit = async(data: ITaskForm) => {
-        if(!projectId) return
+    const submit = async (data: ITaskForm) => {
+        if (!projectId) return
 
         const obj: ICreateTask = {
             body: data,
             projectId: projectId,
         }
-        
-        try{
+
+        try {
             await createTask(obj)
             toast.success("Project created successfully");
             setOpen(false);
-        }catch(error){
+        } catch (error) {
             toast.error(`Failed to create project: ${error}`);
         }
     }
@@ -209,7 +209,7 @@ export const CreateTaskForm = () => {
                                 </Field>
                             )}
                         />
-                        
+
                     </FieldGroup>
 
                     <DialogFooter>
@@ -219,7 +219,7 @@ export const CreateTaskForm = () => {
                         <Button type="submit">
                             Create
                         </Button>
-                    </DialogFooter>  
+                    </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>

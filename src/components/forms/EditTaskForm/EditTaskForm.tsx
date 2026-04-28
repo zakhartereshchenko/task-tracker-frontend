@@ -27,10 +27,6 @@ export const EditTaskForm = () => {
 
     const {data: task, isPending: isPendingTask} = useGetTask({ projectId, taskId })
 
-    console.log('taskId', taskId )
-    console.log('projectId', projectId )
-    console.log('task', task)
-
     const { data: labels, isPending: isPendingLabel } = useGetLabels(projectId ?? "");
 
     const { data: users, isPending: isPendingUsers } = useGetUsers(projectId ?? "");

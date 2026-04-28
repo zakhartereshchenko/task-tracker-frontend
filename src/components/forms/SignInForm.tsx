@@ -7,8 +7,8 @@ import { toast } from "sonner";
 
 
 export const SignInForm: React.FC = () => {
-  const navigate = useNavigate();
-    
+    const navigate = useNavigate();
+
     const form = useForm<LoginData>({
         mode: "onChange",
     });
@@ -16,11 +16,11 @@ export const SignInForm: React.FC = () => {
     const { mutateAsync, data: user, isPending } = useLogin();
 
     const handleSignIn = async (data: LoginData) => {
-        try{
+        try {
             await mutateAsync(data)
-            toast.success("Signed in successfully" )
+            toast.success("Signed in successfully")
             navigate("/projects");
-        }catch(error){
+        } catch (error) {
             toast.error(`${error} error`)
             navigate("/login");
         }
