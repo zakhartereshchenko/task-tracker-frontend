@@ -1,6 +1,6 @@
 import { endpoints } from "../constants/api";
-import type { User } from "../store/auth.store";
 import type { IAuthData, ILoginResponse } from "../types/api";
+import type { User } from "../types/projects";
 import { api } from "../utils/api";
 
 export const login = (data: IAuthData): Promise<ILoginResponse> => api.post(endpoints.login, data)
